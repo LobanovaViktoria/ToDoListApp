@@ -13,6 +13,8 @@ protocol ListViewProtocol: AnyObject {
 
 class ListViewController: UIViewController {
 
+    // MARK: - Properties
+    
     var presenter: ListPresenterProtocol?
     
     private let indent: CGFloat = 20
@@ -54,6 +56,8 @@ class ListViewController: UIViewController {
         return collectionView
     }()
    
+    // MARK: - viewDidLoad
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .backgroundGray
@@ -63,6 +67,8 @@ class ListViewController: UIViewController {
         collectionView.dataSource = self
         presenter?.viewDidLoaded()
     }
+    
+    // MARK: - Private Methods
     
     private func addSubviews() {
         view.addSubview(titleLabel)
@@ -93,6 +99,8 @@ class ListViewController: UIViewController {
     }
 }
 
+// MARK: - extension UICollectionViewDataSource
+
 extension ListViewController: UICollectionViewDataSource {
     func collectionView(
         _ collectionView: UICollectionView,
@@ -119,6 +127,8 @@ extension ListViewController: UICollectionViewDataSource {
            10
         }
     }
+
+// MARK: - extension UICollectionViewDelegateFlowLayout
 
 extension ListViewController: UICollectionViewDelegateFlowLayout {
 
@@ -158,6 +168,8 @@ extension ListViewController: UICollectionViewDelegateFlowLayout {
             return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
     }
 }
+
+// MARK: - extension ListViewProtocol
 
 extension ListViewController: ListViewProtocol {
     func showList() {

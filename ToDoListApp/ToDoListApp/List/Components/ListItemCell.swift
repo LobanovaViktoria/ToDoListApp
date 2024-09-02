@@ -9,6 +9,8 @@ import UIKit
 
 final class ListItemCell: UICollectionViewCell {
     
+    // MARK: - Properties
+    
     static let identifier = "ListItemCell"
     private let indent: CGFloat = 10
     
@@ -67,19 +69,50 @@ final class ListItemCell: UICollectionViewCell {
          return label
      }()
     
+    // MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
+        addSubviews()
+        setupLayout() 
+        contentView.backgroundColor = .customWhite
+        contentView.layer.cornerRadius = 20
+        contentView.layer.borderWidth = 1
+        contentView.layer.borderColor = UIColor.borderGray?.cgColor
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Methods
+    
+    func configure(
+        name: String,
+        description: String,
+        date: String,
+        doneButtonAction: @escaping () -> Void) {
+            nameLabel.text = name
+            descriptionLabel.text = description
+            dateLabel.text = date
+            onToggleDone = doneButtonAction
+        }
+    
+    // MARK: - Private Methods
+    
+    @objc private func doneButtonTapped() {
+        onToggleDone?()
+    }
+    
+    private func addSubviews() {
         contentView.addSubview(doneButton)
         contentView.addSubview(nameLabel)
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(createdLabel)
         contentView.addSubview(dateLabel)
-        
-        contentView.backgroundColor = .customWhite
-        contentView.layer.cornerRadius = 20
-        contentView.layer.borderWidth = 1
-        contentView.layer.borderColor = UIColor.borderGray?.cgColor
-        
+    }
+  
+    private func setupLayout() {
         NSLayoutConstraint.activate([
             nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: indent),
             nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: indent),
@@ -103,26 +136,4 @@ final class ListItemCell: UICollectionViewCell {
             dateLabel.centerYAnchor.constraint(equalTo: createdLabel.centerYAnchor)
         ])
     }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    @objc private func doneButtonTapped() {
-        onToggleDone?()
-    }
-    
-    func configure(
-        name: String,
-        description: String,
-        date: String,
-        doneButtonAction: @escaping () -> Void) {
-            nameLabel.text = name
-            descriptionLabel.text = description
-            dateLabel.text = date
-            onToggleDone = doneButtonAction
-        }
-   
-   
 }
-
