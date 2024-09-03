@@ -7,14 +7,22 @@
 
 import Foundation
 
+// MARK: - protocol ListPresenterProtocol
+
 protocol ListPresenterProtocol: AnyObject {
+    
     func viewDidLoaded()
+    func didLoad(list: [Todo]?)
 }
+
+// MARK: - class ListPresenter
 
 class ListPresenter {
     weak var view: ListViewProtocol?
     var router: ListRouterProtocol
     var interactor: ListInteractorProtocol
+    
+    // MARK: - Init()
     
     init(
         router: ListRouterProtocol,
@@ -22,12 +30,20 @@ class ListPresenter {
     {
         self.router = router
         self.interactor = interactor
-    }
-    
+    }  
 }
 
+// MARK: - extension ListPresenterProtocol
+
 extension ListPresenter: ListPresenterProtocol {
+    
     func viewDidLoaded() {
-        
+        interactor.getList()
+    }
+    
+    func didLoad(list: [Todo]?) {
+        if  let list = list {
+            view?.showList(list: list)
+        }
     }
 }

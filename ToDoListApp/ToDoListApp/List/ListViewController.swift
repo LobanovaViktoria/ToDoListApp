@@ -7,17 +7,22 @@
 
 import UIKit
 
+// MARK: - protocol ListViewProtocol
+
 protocol ListViewProtocol: AnyObject {
-    func showList()
+    func showList(list: [Todo])
 }
 
-class ListViewController: UIViewController {
+// MARK: - class ListViewController
 
+class ListViewController: UIViewController {
+    
     // MARK: - Properties
     
     var presenter: ListPresenterProtocol?
     
     private let indent: CGFloat = 20
+    var list: [Todo]?
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -40,7 +45,7 @@ class ListViewController: UIViewController {
         button.setImage(UIImage(systemName: "plus.circle"), for: .normal)
         button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 40), forImageIn: .normal)
         button.imageView?.contentMode = .scaleAspectFit
-        button.imageView?.tintColor = .borderBlue
+        button.imageView?.tintColor = .customBlack
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -55,17 +60,17 @@ class ListViewController: UIViewController {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
-   
+    
     // MARK: - viewDidLoad
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .backgroundGray
-        addSubviews()
-        setupLayout()
-        collectionView.delegate = self
-        collectionView.dataSource = self
         presenter?.viewDidLoaded()
+        view.backgroundColor = .backgroundGray
+        self.addSubviews()
+        self.setupLayout()
+        self.collectionView.delegate = self
+        self.collectionView.dataSource = self
     }
     
     // MARK: - Private Methods
@@ -75,7 +80,7 @@ class ListViewController: UIViewController {
         view.addSubview(plusButton)
         view.addSubview(collectionView)
     }
-
+    
     private func setupLayout() {
         NSLayoutConstraint.activate([
             plusButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
@@ -109,39 +114,44 @@ extension ListViewController: UICollectionViewDataSource {
         guard let collectionCell = collectionView.dequeueReusableCell(
             withReuseIdentifier: ListItemCell.identifier,
             for: indexPath) as? ListItemCell else { return UICollectionViewCell() }
-        collectionCell.configure(
-            name: "sjdfn dsfs sdf  sjifs",
-            description: "ssdfsssdfssdsdds sdkjn kjnk kjnk kjn kjn kjn kjn kkssdfssdsdds sdkjn kjnk kjnk kjn kjn kjn kjn kkssdfssdsdds sdkjn kjnk kjnk kjn kjn kjn kjn kkssdfssdsdds sdkjn kjnk kjnk kjn kjn kjn kjn kkssdfssdsdds sdkjn kjnk kjnk kjn kjn kjn kjn kksdsdds sdkjn kjnk kjnk kjn kjn kjn kjn kk",
-            date: dateFormatter.string(from: Date())
-        ) {
+        if let list = list {
+            let item = list[indexPath.row]
+            collectionCell.configure(
+                name: "no name",
+                description: item.todo,
+                date: dateFormatter.string(from: Date())
+            ) {
                 print("done")
-        } 
-        return collectionCell
+            }
+        }
+            return collectionCell
     }
-
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         1
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-           10
-        }
+        if let list = list {
+            list.count
+        } else { 0 }
     }
+}
 
 // MARK: - extension UICollectionViewDelegateFlowLayout
 
 extension ListViewController: UICollectionViewDelegateFlowLayout {
-
+    
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-       
-            let bounds = UIScreen.main.bounds
-            let width = (bounds.width - 48)/2
-            return CGSize(width: width, height: 240)
-        }
+        
+        let bounds = UIScreen.main.bounds
+        let width = (bounds.width - 48)/2
+        return CGSize(width: width, height: 240)
+    }
     
     func collectionView(
         _ collectionView: UICollectionView,
@@ -150,7 +160,7 @@ extension ListViewController: UICollectionViewDelegateFlowLayout {
     ) -> CGFloat {
         return 10
     }
-
+    
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -158,21 +168,24 @@ extension ListViewController: UICollectionViewDelegateFlowLayout {
     ) -> CGFloat {
         return 0
     }
-
+    
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         insetForSectionAt section: Int
     ) -> UIEdgeInsets {
         
-            return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
     }
 }
 
 // MARK: - extension ListViewProtocol
 
 extension ListViewController: ListViewProtocol {
-    func showList() {
-         
+    func showList(list: [Todo]) {
+        self.list = list
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
     }
 }
