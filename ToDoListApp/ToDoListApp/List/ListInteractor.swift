@@ -9,13 +9,33 @@ import UIKit
 
 protocol ListInteractorProtocol: AnyObject {
     func getList()
-    //func getImageForCurrentTemperature() -> UIImage?
 }
 
-class ListInteractor: ListInteractorProtocol {
-    weak var presenter: ListPresenterProtocol?
+class ListInteractor {
     
-    func getList(){
-        
+    // MARK: - Properties
+    
+    weak var presenter: ListPresenterProtocol?
+    private let service = NetworkLayer()
+  
+    var onError: ((NetworkLayerError) -> Void)?
+}
+
+// MARK: - Extension ListInteractorProtocol
+
+extension ListInteractor: ListInteractorProtocol {
+    func getList() {
+        service.getList() { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let list):
+                    self?.presenter?.didLoad(list: list)
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self?.onError?(error)
+                    }
+                }
+            }
+        }
     }
 }
