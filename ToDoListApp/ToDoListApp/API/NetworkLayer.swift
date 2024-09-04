@@ -18,7 +18,7 @@ final class NetworkLayer {
     
     func getList(
         completion: @escaping (
-            Result<[Todo],NetworkLayerError>
+            Result<[TodoAPIModel],NetworkLayerError>
         ) -> Void) {
         let getURLResult = getUrl()
         switch getURLResult {

@@ -10,7 +10,7 @@ import UIKit
 // MARK: - protocol ListViewProtocol
 
 protocol ListViewProtocol: AnyObject {
-    func showList(list: [Todo])
+    func showListFromAPI(list: [TodoModel])
 }
 
 // MARK: - class ListViewController
@@ -22,7 +22,7 @@ class ListViewController: UIViewController {
     var presenter: ListPresenterProtocol?
     
     private let indent: CGFloat = 20
-    var list: [Todo]?
+    var list: [TodoModel]?
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -46,7 +46,7 @@ class ListViewController: UIViewController {
     }()
     
     private lazy var allButton: FilterButton = {
-        let button = FilterButton(title: "All", count: 0)
+        let button = FilterButton(title: "all".localized, count: 35)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(allButtonPressed), for: .touchUpInside)
         button.isSelected = true
@@ -54,7 +54,7 @@ class ListViewController: UIViewController {
     }()
     
     private lazy var openButton: FilterButton = {
-       let button = FilterButton(title: "Open", count: 15)
+        let button = FilterButton(title: "open".localized, count: 14)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(openButtonPressed), for: .touchUpInside)
         button.isSelected = false
@@ -62,7 +62,7 @@ class ListViewController: UIViewController {
     }()
     
     private lazy var closedButton: FilterButton = {
-       let button = FilterButton(title: "Closed", count: 17)
+        let button = FilterButton(title: "closed".localized, count: 19)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(closedButtonPressed), for: .touchUpInside)
         button.isSelected = false
@@ -215,8 +215,10 @@ extension ListViewController: UICollectionViewDataSource {
             let item = list[indexPath.row]
             collectionCell.configure(
                 name: item.todo,
-                description: "",
-                isCompleted: item.completed) {
+                description: item.descriptionTodo,
+                isCompleted: item.completed, 
+                date: item.date
+            ) {
                     
                 }
         }
@@ -278,7 +280,7 @@ extension ListViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - extension ListViewProtocol
 
 extension ListViewController: ListViewProtocol {
-    func showList(list: [Todo]) {
+    func showListFromAPI(list: [TodoModel]) {
         self.list = list
         DispatchQueue.main.async {
             self.collectionView.reloadData()

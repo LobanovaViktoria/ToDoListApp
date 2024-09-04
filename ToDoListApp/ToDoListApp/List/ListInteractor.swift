@@ -8,7 +8,8 @@
 import UIKit
 
 protocol ListInteractorProtocol: AnyObject {
-    func getList()
+    func getListFromAPI()
+    func getListFromCoreData()
 }
 
 class ListInteractor {
@@ -24,12 +25,12 @@ class ListInteractor {
 // MARK: - Extension ListInteractorProtocol
 
 extension ListInteractor: ListInteractorProtocol {
-    func getList() {
+    func getListFromAPI() {
         service.getList() { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let list):
-                    self?.presenter?.didLoad(list: list)
+                    self?.presenter?.syncingAPIAndCorData(list: list)
                 case .failure(let error):
                     DispatchQueue.main.async {
                         self?.onError?(error)
@@ -37,5 +38,9 @@ extension ListInteractor: ListInteractorProtocol {
                 }
             }
         }
+    }
+    
+    func getListFromCoreData() {
+        self.presenter?.uploadedFromCoreData()
     }
 }

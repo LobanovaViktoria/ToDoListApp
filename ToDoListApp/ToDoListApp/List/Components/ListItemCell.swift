@@ -16,6 +16,12 @@ final class ListItemCell: UICollectionViewCell {
     
     var onToggleDone: (() -> Void)?
    
+    private lazy var dateFormatterShort: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        return formatter
+    }()
+    
     private lazy var doneButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(doneButtonTapped), for: .touchUpInside)
@@ -93,6 +99,7 @@ final class ListItemCell: UICollectionViewCell {
         name: String,
         description: String,
         isCompleted: Bool,
+        date: Date,
         doneButtonAction: @escaping () -> Void) {
             if isCompleted {
                 doneButton.setImage(UIImage(
@@ -110,6 +117,7 @@ final class ListItemCell: UICollectionViewCell {
             }
             descriptionLabel.text = description
             onToggleDone = doneButtonAction
+            dateLabel.text = dateFormatterShort.string(from: date)
         }
     
     // MARK: - Private Methods

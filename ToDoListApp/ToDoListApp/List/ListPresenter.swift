@@ -12,12 +12,17 @@ import Foundation
 protocol ListPresenterProtocol: AnyObject {
     
     func viewDidLoaded()
-    func didLoad(list: [Todo]?)
+    func uploadedFromCoreData()
+    func syncingAPIAndCorData(list: [TodoAPIModel]?)
 }
 
 // MARK: - class ListPresenter
 
 class ListPresenter {
+    
+    private let userDefaultsString = "dataIsSynchronized"
+    private let todosStore = TodosStore()
+    
     weak var view: ListViewProtocol?
     var router: ListRouterProtocol
     var interactor: ListInteractorProtocol
@@ -30,20 +35,38 @@ class ListPresenter {
     {
         self.router = router
         self.interactor = interactor
-    }  
+        todosStore.delegate = self
+    }
 }
 
 // MARK: - extension ListPresenterProtocol
 
 extension ListPresenter: ListPresenterProtocol {
-    
+  
     func viewDidLoaded() {
-        interactor.getList()
+        if UserDefaults.standard.value(forKey: userDefaultsString) == nil {
+            interactor.getListFromAPI()
+           
+        } else {
+            interactor.getListFromCoreData()
+        }
+        UserDefaults.standard.set(true, forKey: userDefaultsString)
     }
     
-    func didLoad(list: [Todo]?) {
-        if  let list = list {
-            view?.showList(list: list)
+    func syncingAPIAndCorData(list: [TodoAPIModel]?) {
+        if let list = list {
+            try? todosStore.addTodosFromApi(list)
         }
+    }
+    
+    func uploadedFromCoreData() {
+            view?.showListFromAPI(list: todosStore.todos)
+    }
+}
+
+extension ListPresenter: TodosStoreDelegate {
+    
+    func store(_ store: TodosStore, didUpdate update: TodosUpdate) {
+        
     }
 }
