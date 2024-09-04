@@ -19,15 +19,13 @@ final class ListItemCell: UICollectionViewCell {
     private lazy var doneButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(doneButtonTapped), for: .touchUpInside)
-        button.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
         button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 40), forImageIn: .normal)
         button.imageView?.contentMode = .scaleAspectFit
-        button.imageView?.tintColor = .borderBlue
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
-   private lazy var nameLabel: UILabel = {
+   private lazy var taskName: UILabel = {
         let label = UILabel()
         label.textColor = .customBlack
         label.textAlignment = .left
@@ -39,32 +37,38 @@ final class ListItemCell: UICollectionViewCell {
 
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .textPrimary
+        label.textColor = .customGray
         label.textAlignment = .left
-        label.numberOfLines = 7
+        label.numberOfLines = 2
         label.font = .caption1
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
+    private lazy var dividerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .customLightGray
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private lazy var createdLabel: UILabel = {
          let label = UILabel()
-         label.textColor = .customBlack
+         label.textColor = .customGray
          label.textAlignment = .left
          label.text = "created".localized
          label.numberOfLines = 1
-         label.font = .bodyBold
+         label.font = .headline3
          label.translatesAutoresizingMaskIntoConstraints = false
          return label
      }()
     
     private lazy var dateLabel: UILabel = {
          let label = UILabel()
-         label.textColor = .customBlack
+         label.textColor = .customGray
          label.textAlignment = .left
-         label.text = "created".localized
          label.numberOfLines = 1
-         label.font = .bodyRegular
+         label.font = .headline3
          label.translatesAutoresizingMaskIntoConstraints = false
          return label
      }()
@@ -77,8 +81,6 @@ final class ListItemCell: UICollectionViewCell {
         setupLayout() 
         contentView.backgroundColor = .customWhite
         contentView.layer.cornerRadius = 20
-        contentView.layer.borderWidth = 1
-        contentView.layer.borderColor = UIColor.borderGray?.cgColor
     }
 
     required init?(coder: NSCoder) {
@@ -90,11 +92,23 @@ final class ListItemCell: UICollectionViewCell {
     func configure(
         name: String,
         description: String,
-        date: String,
+        isCompleted: Bool,
         doneButtonAction: @escaping () -> Void) {
-            nameLabel.text = name
+            if isCompleted {
+                doneButton.setImage(UIImage(
+                    systemName: "checkmark.circle.fill"), for: .normal)
+                doneButton.imageView?.tintColor = UIColor.customBlue
+                taskName.attributedText = NSAttributedString(string: name, attributes: [NSAttributedString.Key.strikethroughStyle: NSUnderlineStyle.single.rawValue])
+                
+            } else {
+                doneButton.setImage(UIImage(
+                    systemName:  "circle"
+                ), for: .normal)
+                doneButton.imageView?.tintColor =
+                 UIColor.customLightGray
+                taskName.text = name
+            }
             descriptionLabel.text = description
-            dateLabel.text = date
             onToggleDone = doneButtonAction
         }
     
@@ -106,31 +120,38 @@ final class ListItemCell: UICollectionViewCell {
     
     private func addSubviews() {
         contentView.addSubview(doneButton)
-        contentView.addSubview(nameLabel)
+        contentView.addSubview(taskName)
         contentView.addSubview(descriptionLabel)
+        contentView.addSubview(dividerView)
         contentView.addSubview(createdLabel)
         contentView.addSubview(dateLabel)
     }
   
     private func setupLayout() {
         NSLayoutConstraint.activate([
-            nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: indent),
-            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: indent),
-            nameLabel.trailingAnchor.constraint(equalTo: doneButton.leadingAnchor, constant: -indent),
-            nameLabel.heightAnchor.constraint(equalToConstant: 50),
-            
-            doneButton.centerYAnchor.constraint(equalTo: nameLabel.centerYAnchor),
-            doneButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -indent),
-            doneButton.heightAnchor.constraint(equalToConstant: 40),
-            doneButton.widthAnchor.constraint(equalToConstant: 40),
-            
-            descriptionLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 5),
+            taskName.topAnchor.constraint(equalTo: contentView.topAnchor, constant: indent),
+            taskName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: indent),
+            taskName.trailingAnchor.constraint(equalTo: doneButton.leadingAnchor, constant: -indent),
+            taskName.heightAnchor.constraint(equalToConstant: 60),
+        
+            descriptionLabel.topAnchor.constraint(equalTo: taskName.bottomAnchor, constant: 5),
             descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: indent),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -indent),
+            descriptionLabel.trailingAnchor.constraint(equalTo: doneButton.leadingAnchor, constant: -indent),
+            descriptionLabel.heightAnchor.constraint(equalToConstant: 40),
             
-            createdLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: indent),
+            doneButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: indent),
+            doneButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -indent),
+            doneButton.heightAnchor.constraint(equalToConstant: 30),
+            doneButton.widthAnchor.constraint(equalToConstant: 30),
+            
+            dividerView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: indent),
+            dividerView.heightAnchor.constraint(equalToConstant: 2),
+            dividerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: indent),
+            dividerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -indent),
+            
+            createdLabel.topAnchor.constraint(equalTo: dividerView.bottomAnchor, constant: indent),
             createdLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: indent),
-            createdLabel.trailingAnchor.constraint(equalTo: dateLabel.leadingAnchor),
+            createdLabel.trailingAnchor.constraint(equalTo: dateLabel.leadingAnchor, constant: -3),
             createdLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -indent),
           
             dateLabel.centerYAnchor.constraint(equalTo: createdLabel.centerYAnchor)

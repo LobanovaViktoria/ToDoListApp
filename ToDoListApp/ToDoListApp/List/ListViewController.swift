@@ -26,7 +26,7 @@ class ListViewController: UIViewController {
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd.MM.yy"
+        formatter.dateFormat = "EEEE, MMM d"
         return formatter
     }()
     
@@ -39,15 +39,62 @@ class ListViewController: UIViewController {
         return label
     }()
     
-    private lazy var plusButton: UIButton = {
+    private lazy var filtersView: UIView = {
+       let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private lazy var allButton: FilterButton = {
+        let button = FilterButton(title: "All", count: 0)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(allButtonPressed), for: .touchUpInside)
+        button.isSelected = true
+        return button
+    }()
+    
+    private lazy var openButton: FilterButton = {
+       let button = FilterButton(title: "Open", count: 15)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(openButtonPressed), for: .touchUpInside)
+        button.isSelected = false
+        return button
+    }()
+    
+    private lazy var closedButton: FilterButton = {
+       let button = FilterButton(title: "Closed", count: 17)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(closedButtonPressed), for: .touchUpInside)
+        button.isSelected = false
+        return button
+    }()
+    
+    private lazy var filterButtonsSeparatorView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .customGray
+        return view
+    }()
+    
+    private lazy var addNewTaskButton: UIButton = {
         let button = UIButton()
-        button.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
-        button.setImage(UIImage(systemName: "plus.circle"), for: .normal)
-        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 40), forImageIn: .normal)
-        button.imageView?.contentMode = .scaleAspectFit
-        button.imageView?.tintColor = .customBlack
+        button.addTarget(self, action: #selector(addNewTaskButtonPressed), for: .touchUpInside)
+        button.setTitle("addNewTask".localized, for: .normal)
+        button.titleLabel?.font = .headline3
+        button.setTitleColor(.customBlue, for: .normal)
+        button.backgroundColor = .customLightBlue
+        button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
+    }()
+    
+    private lazy var dateLabel: UILabel = {
+        let label = UILabel()
+        label.text = dateFormatter.string(from: Date())
+        label.font = .headline2
+        label.textColor = .customGray
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     private lazy var collectionView: UICollectionView = {
@@ -56,7 +103,7 @@ class ListViewController: UIViewController {
             collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.register(ListItemCell.self,
                                 forCellWithReuseIdentifier: ListItemCell.identifier)
-        collectionView.backgroundColor = .backgroundGray
+        collectionView.backgroundColor = .customLightGray
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
@@ -66,7 +113,7 @@ class ListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter?.viewDidLoaded()
-        view.backgroundColor = .backgroundGray
+        view.backgroundColor = .customLightGray
         self.addSubviews()
         self.setupLayout()
         self.collectionView.delegate = self
@@ -77,30 +124,80 @@ class ListViewController: UIViewController {
     
     private func addSubviews() {
         view.addSubview(titleLabel)
-        view.addSubview(plusButton)
+        view.addSubview(addNewTaskButton)
+        view.addSubview(dateLabel)
         view.addSubview(collectionView)
+        view.addSubview(filtersView)
+        filtersView.addSubview(allButton)
+        filtersView.addSubview(filterButtonsSeparatorView)
+        filtersView.addSubview(openButton)
+        filtersView.addSubview(closedButton)
     }
     
     private func setupLayout() {
         NSLayoutConstraint.activate([
-            plusButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            plusButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -indent),
-            plusButton.heightAnchor.constraint(equalToConstant: 40),
-            plusButton.widthAnchor.constraint(equalToConstant: 40),
+            addNewTaskButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: indent),
+            addNewTaskButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -indent),
+            addNewTaskButton.heightAnchor.constraint(equalToConstant: 45),
+            addNewTaskButton.widthAnchor.constraint(equalToConstant: 120),
             
-            titleLabel.topAnchor.constraint(equalTo: plusButton.bottomAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -indent),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            titleLabel.trailingAnchor.constraint(equalTo: addNewTaskButton.leadingAnchor, constant: -indent),
             titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: indent),
             
-            collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15),
+            dateLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+            dateLabel.trailingAnchor.constraint(equalTo: addNewTaskButton.leadingAnchor, constant: -indent),
+            dateLabel.widthAnchor.constraint(equalToConstant: 150),
+            dateLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: indent),
+            
+            filtersView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            filtersView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            filtersView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: indent),
+            filtersView.heightAnchor.constraint(equalToConstant: 30),
+            
+            allButton.leadingAnchor.constraint(equalTo: filtersView.leadingAnchor, constant: indent),
+            allButton.topAnchor.constraint(equalTo: filtersView.topAnchor),
+            allButton.bottomAnchor.constraint(equalTo: filtersView.bottomAnchor),
+            
+            filterButtonsSeparatorView.leadingAnchor.constraint(equalTo: allButton.trailingAnchor, constant: 15),
+            filterButtonsSeparatorView.topAnchor.constraint(equalTo: filtersView.topAnchor),
+            filterButtonsSeparatorView.bottomAnchor.constraint(equalTo: filtersView.bottomAnchor),
+            filterButtonsSeparatorView.widthAnchor.constraint(equalToConstant: 2),
+            
+            openButton.leadingAnchor.constraint(equalTo: filterButtonsSeparatorView.trailingAnchor, constant: 15),
+            openButton.centerYAnchor.constraint(equalTo: allButton.centerYAnchor),
+            
+            closedButton.leadingAnchor.constraint(equalTo: openButton.trailingAnchor, constant: 15),
+            closedButton.centerYAnchor.constraint(equalTo: allButton.centerYAnchor),
+            closedButton.trailingAnchor.constraint(lessThanOrEqualTo: filtersView.trailingAnchor, constant: 10),
+            
+            collectionView.topAnchor.constraint(equalTo: allButton.bottomAnchor, constant: 15),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
     }
     
-    @objc private func plusButtonTapped() {
+    @objc private func addNewTaskButtonPressed() {
         
+    }
+    
+    @objc private func allButtonPressed() {
+        allButton.isSelected = !allButton.isSelected
+        openButton.isSelected = !allButton.isSelected
+        closedButton.isSelected = !allButton.isSelected
+    }
+    
+    @objc private func openButtonPressed() {
+        openButton.isSelected = !openButton.isSelected
+        allButton.isSelected = !openButton.isSelected
+        closedButton.isSelected = !openButton.isSelected
+    }
+    
+    @objc private func closedButtonPressed() {
+        closedButton.isSelected = !closedButton.isSelected
+        allButton.isSelected = !closedButton.isSelected
+        openButton.isSelected = !closedButton.isSelected
     }
 }
 
@@ -117,12 +214,11 @@ extension ListViewController: UICollectionViewDataSource {
         if let list = list {
             let item = list[indexPath.row]
             collectionCell.configure(
-                name: "no name",
-                description: item.todo,
-                date: dateFormatter.string(from: Date())
-            ) {
-                print("done")
-            }
+                name: item.todo,
+                description: "",
+                isCompleted: item.completed) {
+                    
+                }
         }
             return collectionCell
     }
@@ -149,8 +245,8 @@ extension ListViewController: UICollectionViewDelegateFlowLayout {
     ) -> CGSize {
         
         let bounds = UIScreen.main.bounds
-        let width = (bounds.width - 48)/2
-        return CGSize(width: width, height: 240)
+        let width = bounds.width - indent * 2
+        return CGSize(width: width, height: 180)
     }
     
     func collectionView(
