@@ -10,7 +10,7 @@ import UIKit
 // MARK: - protocol ListViewProtocol
 
 protocol ListViewProtocol: AnyObject {
-    func showListFromAPI(list: [TodoModel])
+    func showList(list: [TodoModel])
 }
 
 // MARK: - class ListViewController
@@ -280,7 +280,7 @@ extension ListViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - extension ListViewProtocol
 
 extension ListViewController: ListViewProtocol {
-    func showListFromAPI(list: [TodoModel]) {
+    func showList(list: [TodoModel]) {
         self.list = list
         DispatchQueue.main.async {
             self.collectionView.reloadData()

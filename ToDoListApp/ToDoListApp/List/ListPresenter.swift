@@ -46,11 +46,9 @@ extension ListPresenter: ListPresenterProtocol {
     func viewDidLoaded() {
         if UserDefaults.standard.value(forKey: userDefaultsString) == nil {
             interactor.getListFromAPI()
-           
-        } else {
-            interactor.getListFromCoreData()
         }
         UserDefaults.standard.set(true, forKey: userDefaultsString)
+        interactor.getListFromCoreData()
     }
     
     func syncingAPIAndCorData(list: [TodoAPIModel]?) {
@@ -60,7 +58,9 @@ extension ListPresenter: ListPresenterProtocol {
     }
     
     func uploadedFromCoreData() {
-            view?.showListFromAPI(list: todosStore.todos)
+       
+            view?.showList(list: todosStore.todos)
+        view.
     }
 }
 

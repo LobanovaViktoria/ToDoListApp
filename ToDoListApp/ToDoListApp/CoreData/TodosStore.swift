@@ -42,7 +42,7 @@ class TodosStore: NSObject {
         do {
             try fetchedResultsController.performFetch()
         } catch {
-            assertionFailure("TrackerStore fetch failed")
+            assertionFailure("TodoStore fetch failed")
         }
     }
     
