@@ -16,7 +16,6 @@
 		320F4D9D2C85BC0E001DA7B7 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F4D9C2C85BC0E001DA7B7 /* String+Ext.swift */; };
 		320F4DA02C85BC42001DA7B7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 320F4D9E2C85BC42001DA7B7 /* Localizable.strings */; };
 		320F4DA62C85BEC5001DA7B7 /* Font+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F4DA52C85BEC5001DA7B7 /* Font+Ext.swift */; };
-		320F4DA82C85BF34001DA7B7 /* Color+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F4DA72C85BF34001DA7B7 /* Color+Ext.swift */; };
 		320F52FA2C85A14D009E511E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F52F92C85A14D009E511E /* AppDelegate.swift */; };
 		320F52FC2C85A14D009E511E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F52FB2C85A14D009E511E /* SceneDelegate.swift */; };
 		320F52FE2C85A14D009E511E /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F52FD2C85A14D009E511E /* ListViewController.swift */; };
@@ -24,6 +23,7 @@
 		320F53062C85A14E009E511E /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 320F53052C85A14E009E511E /* Base */; };
 		326BEF7F2C86FFAC00C04C03 /* ListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326BEF7E2C86FFAC00C04C03 /* ListModel.swift */; };
 		326BEF822C87272300C04C03 /* NetworkLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326BEF812C87272300C04C03 /* NetworkLayer.swift */; };
+		326BEF862C8754A900C04C03 /* FilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326BEF852C8754A900C04C03 /* FilterButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,7 +38,6 @@
 		320F4DA12C85BD44001DA7B7 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		320F4DA22C85BD44001DA7B7 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		320F4DA52C85BEC5001DA7B7 /* Font+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Ext.swift"; sourceTree = "<group>"; };
-		320F4DA72C85BF34001DA7B7 /* Color+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Ext.swift"; sourceTree = "<group>"; };
 		320F52F62C85A14D009E511E /* ToDoListApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoListApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		320F52F92C85A14D009E511E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		320F52FB2C85A14D009E511E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -48,6 +47,7 @@
 		320F53072C85A14E009E511E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		326BEF7E2C86FFAC00C04C03 /* ListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ListModel.swift; path = ../../../../Documents/ListModel.swift; sourceTree = "<group>"; };
 		326BEF812C87272300C04C03 /* NetworkLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkLayer.swift; sourceTree = "<group>"; };
+		326BEF852C8754A900C04C03 /* FilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				320F4D992C85BB1E001DA7B7 /* ListItemCell.swift */,
+				326BEF852C8754A900C04C03 /* FilterButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -105,7 +106,6 @@
 			children = (
 				320F4D9C2C85BC0E001DA7B7 /* String+Ext.swift */,
 				320F4DA52C85BEC5001DA7B7 /* Font+Ext.swift */,
-				320F4DA72C85BF34001DA7B7 /* Color+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -236,7 +236,6 @@
 				320F4D912C85B5CE001DA7B7 /* ListModuleBulder.swift in Sources */,
 				320F52FA2C85A14D009E511E /* AppDelegate.swift in Sources */,
 				320F4DA62C85BEC5001DA7B7 /* Font+Ext.swift in Sources */,
-				320F4DA82C85BF34001DA7B7 /* Color+Ext.swift in Sources */,
 				320F4D8F2C85B551001DA7B7 /* DetailViewController.swift in Sources */,
 				320F4D932C85B5E3001DA7B7 /* ListPresenter.swift in Sources */,
 				320F4D972C85B605001DA7B7 /* ListInteractor.swift in Sources */,
@@ -244,6 +243,7 @@
 				326BEF7F2C86FFAC00C04C03 /* ListModel.swift in Sources */,
 				320F4D9D2C85BC0E001DA7B7 /* String+Ext.swift in Sources */,
 				320F4D9A2C85BB1E001DA7B7 /* ListItemCell.swift in Sources */,
+				326BEF862C8754A900C04C03 /* FilterButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

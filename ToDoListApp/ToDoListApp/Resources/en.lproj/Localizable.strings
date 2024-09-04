@@ -1,2 +1,3 @@
-"title" = "Todo list...";
-"created" = "created: ";
+"title" = "Today's task";
+"addNewTask" = "+ New Task";
+"created" = "Created: ";
