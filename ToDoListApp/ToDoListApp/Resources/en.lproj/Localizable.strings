@@ -1,6 +1,2 @@
-"title" = "Today's task";
-"addNewTask" = "+ New Task";
-"created" = "Created: ";
-"all" = "All";
-"open" = "Open";
-"closed" = "Closed";
+"title" = "Todo list...";
+"created" = "created: ";
