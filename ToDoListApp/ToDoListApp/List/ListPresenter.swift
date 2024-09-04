@@ -58,9 +58,7 @@ extension ListPresenter: ListPresenterProtocol {
     }
     
     func uploadedFromCoreData() {
-       
             view?.showList(list: todosStore.todos)
-        view.
     }
 }
 
