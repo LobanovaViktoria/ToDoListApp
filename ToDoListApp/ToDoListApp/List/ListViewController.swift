@@ -179,7 +179,7 @@ class ListViewController: UIViewController {
     }
     
     @objc private func addNewTaskButtonPressed() {
-        
+        presenter?.didTapAddNewTodo()
     }
     
     @objc private func allButtonPressed() {

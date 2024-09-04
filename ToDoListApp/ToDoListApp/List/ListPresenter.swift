@@ -14,6 +14,7 @@ protocol ListPresenterProtocol: AnyObject {
     func viewDidLoaded()
     func uploadedFromCoreData()
     func syncingAPIAndCorData(list: [TodoAPIModel]?)
+    func didTapAddNewTodo()
 }
 
 // MARK: - class ListPresenter
@@ -59,6 +60,10 @@ extension ListPresenter: ListPresenterProtocol {
     
     func uploadedFromCoreData() {
             view?.showList(list: todosStore.todos)
+    }
+    
+    func didTapAddNewTodo() {
+        router.openDetail()
     }
 }
 
