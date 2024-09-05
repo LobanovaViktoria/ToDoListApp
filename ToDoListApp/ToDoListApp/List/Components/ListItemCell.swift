@@ -15,12 +15,14 @@ final class ListItemCell: UICollectionViewCell {
     private let indent: CGFloat = 10
     
     var onToggleDone: (() -> Void)?
-   
+    
     private lazy var dateFormatterShort: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
         return formatter
     }()
+    
+    // MARK: - UI
     
     private lazy var doneButton: UIButton = {
         let button = UIButton()
@@ -46,7 +48,7 @@ final class ListItemCell: UICollectionViewCell {
         label.textColor = .customGray
         label.textAlignment = .left
         label.numberOfLines = 2
-        label.font = .caption1
+        label.font = .caption2
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -105,7 +107,10 @@ final class ListItemCell: UICollectionViewCell {
                 doneButton.setImage(UIImage(
                     systemName: "checkmark.circle.fill"), for: .normal)
                 doneButton.imageView?.tintColor = UIColor.customBlue
-                taskName.attributedText = NSAttributedString(string: name, attributes: [NSAttributedString.Key.strikethroughStyle: NSUnderlineStyle.single.rawValue])
+                taskName.attributedText = NSAttributedString(
+                    string: name,
+                    attributes: [NSAttributedString.Key.strikethroughStyle: NSUnderlineStyle.single.rawValue]
+                )
                 
             } else {
                 doneButton.setImage(UIImage(
@@ -113,7 +118,10 @@ final class ListItemCell: UICollectionViewCell {
                 ), for: .normal)
                 doneButton.imageView?.tintColor =
                  UIColor.customLightGray
-                taskName.text = name
+                taskName.attributedText = NSAttributedString(
+                    string: name,
+                    attributes: [:]
+                )
             }
             descriptionLabel.text = description
             onToggleDone = doneButtonAction

@@ -13,7 +13,8 @@ final class FilterButton: UIControl {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .caption1
+        label.font = .caption2
+        label.text = filter.title
         label.textColor = .customGray
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isUserInteractionEnabled = false
@@ -22,7 +23,7 @@ final class FilterButton: UIControl {
     
     private lazy var countLabel: UILabel = {
         let label = UILabel()
-        label.font = .caption1
+        label.font = .caption2
         label.textColor = .customWhite
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
@@ -40,23 +41,31 @@ final class FilterButton: UIControl {
         return view
     }()
     
+    // MARK: - Properties
+    
+    let filter: Filter
+    
     override var isSelected: Bool {
         didSet {
-            countLabelView.backgroundColor = isSelected ? .customBlue : .customGray
-            titleLabel.textColor = isSelected ? .customBlue : .customGray
+            countLabelView.backgroundColor = isSelected 
+                ? .customBlue
+                : .customGray
+            
+            titleLabel.textColor = isSelected 
+                ? .customBlue
+                : .customGray
         }
     }
     
-    // MARK: - LifeCycle
+    // MARK: - Init
     
     init(
-        title: String,
-        count: Int
+        count: Int,
+        filter: Filter
     ) {
+        self.filter = filter
         super.init(frame: .zero)
-        titleLabel.text = title
         countLabel.text = String(count)
-        
         addSubviews()
         setupLayout()
     }
@@ -81,7 +90,7 @@ final class FilterButton: UIControl {
             
             countLabelView.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: 10),
             countLabelView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            countLabelView.widthAnchor.constraint(greaterThanOrEqualToConstant: 30),
+            countLabelView.widthAnchor.constraint(greaterThanOrEqualToConstant: 20),
             countLabelView.heightAnchor.constraint(equalToConstant: 20),
             countLabelView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             
@@ -91,5 +100,10 @@ final class FilterButton: UIControl {
             countLabel.bottomAnchor.constraint(equalTo: countLabelView.bottomAnchor)
         ])
     }
+    
+    // MARK: - Methods
+    
+    func changeCount(_ value: Int) {
+        countLabel.text = String(value)
+    }
 }
-

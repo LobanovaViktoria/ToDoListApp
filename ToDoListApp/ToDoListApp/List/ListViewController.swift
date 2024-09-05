@@ -10,7 +10,8 @@ import UIKit
 // MARK: - protocol ListViewProtocol
 
 protocol ListViewProtocol: AnyObject {
-    func showList(list: [TodoModel])
+    func updateList()
+    func updateCounters()
 }
 
 // MARK: - class ListViewController
@@ -22,13 +23,17 @@ class ListViewController: UIViewController {
     var presenter: ListPresenterProtocol?
     
     private let indent: CGFloat = 20
-    var list: [TodoModel]?
+    private var list: [TodoModel]? {
+        presenter?.todos
+    }
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE, MMM d"
         return formatter
     }()
+    
+    // MARK: - UI
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -40,32 +45,56 @@ class ListViewController: UIViewController {
     }()
     
     private lazy var filtersView: UIView = {
-       let view = UIView()
+        let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     private lazy var allButton: FilterButton = {
-        let button = FilterButton(title: "all".localized, count: 35)
+        let button = FilterButton(
+            count: presenter?.allTodosCount ?? 0,
+            filter: .all
+        )
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(allButtonPressed), for: .touchUpInside)
+        button.addTarget(
+            self,
+            action: #selector(filterButtonPressed),
+            for: .touchUpInside
+        )
         button.isSelected = true
+        button.tag = Filter.all.rawValue
         return button
     }()
     
     private lazy var openButton: FilterButton = {
-        let button = FilterButton(title: "open".localized, count: 14)
+        let button = FilterButton(
+            count: presenter?.openTodosCount ?? 0,
+            filter: .open
+        )
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(openButtonPressed), for: .touchUpInside)
+        button.addTarget(
+            self,
+            action: #selector(filterButtonPressed),
+            for: .touchUpInside
+        )
         button.isSelected = false
+        button.tag = Filter.open.rawValue
         return button
     }()
     
     private lazy var closedButton: FilterButton = {
-        let button = FilterButton(title: "closed".localized, count: 19)
+        let button = FilterButton(
+            count: presenter?.closedTodosCount ?? 0,
+            filter: .closed
+        )
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(closedButtonPressed), for: .touchUpInside)
+        button.addTarget(
+            self,
+            action: #selector(filterButtonPressed),
+            for: .touchUpInside
+        )
         button.isSelected = false
+        button.tag = Filter.closed.rawValue
         return button
     }()
     
@@ -78,7 +107,11 @@ class ListViewController: UIViewController {
     
     private lazy var addNewTaskButton: UIButton = {
         let button = UIButton()
-        button.addTarget(self, action: #selector(addNewTaskButtonPressed), for: .touchUpInside)
+        button.addTarget(
+            self,
+            action: #selector(addNewTaskButtonPressed),
+            for: .touchUpInside
+        )
         button.setTitle("addNewTask".localized, for: .normal)
         button.titleLabel?.font = .headline3
         button.setTitleColor(.customBlue, for: .normal)
@@ -101,8 +134,10 @@ class ListViewController: UIViewController {
         let collectionView = UICollectionView(
             frame: .zero,
             collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.register(ListItemCell.self,
-                                forCellWithReuseIdentifier: ListItemCell.identifier)
+        collectionView.register(
+            ListItemCell.self,
+            forCellWithReuseIdentifier: ListItemCell.identifier
+        )
         collectionView.backgroundColor = .customLightGray
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
@@ -118,11 +153,14 @@ class ListViewController: UIViewController {
         self.setupLayout()
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
+        
     }
-    
-    // MARK: - Private Methods
-    
-    private func addSubviews() {
+}
+
+// MARK: - Private Methods
+
+private extension ListViewController {
+    func addSubviews() {
         view.addSubview(titleLabel)
         view.addSubview(addNewTaskButton)
         view.addSubview(dateLabel)
@@ -134,7 +172,7 @@ class ListViewController: UIViewController {
         filtersView.addSubview(closedButton)
     }
     
-    private func setupLayout() {
+    func setupLayout() {
         NSLayoutConstraint.activate([
             addNewTaskButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: indent),
             addNewTaskButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -indent),
@@ -147,7 +185,6 @@ class ListViewController: UIViewController {
             
             dateLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
             dateLabel.trailingAnchor.constraint(equalTo: addNewTaskButton.leadingAnchor, constant: -indent),
-            dateLabel.widthAnchor.constraint(equalToConstant: 150),
             dateLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: indent),
             
             filtersView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -178,26 +215,16 @@ class ListViewController: UIViewController {
         ])
     }
     
-    @objc private func addNewTaskButtonPressed() {
-        
+    @objc func addNewTaskButtonPressed() {
+        presenter?.didTapAddNewTodo(event: .add, todo: nil)
     }
     
-    @objc private func allButtonPressed() {
-        allButton.isSelected = !allButton.isSelected
-        openButton.isSelected = !allButton.isSelected
-        closedButton.isSelected = !allButton.isSelected
-    }
-    
-    @objc private func openButtonPressed() {
-        openButton.isSelected = !openButton.isSelected
-        allButton.isSelected = !openButton.isSelected
-        closedButton.isSelected = !openButton.isSelected
-    }
-    
-    @objc private func closedButtonPressed() {
-        closedButton.isSelected = !closedButton.isSelected
-        allButton.isSelected = !closedButton.isSelected
-        openButton.isSelected = !closedButton.isSelected
+    @objc func filterButtonPressed(_ sender: UIButton) {
+        let filter = Filter(rawValue: sender.tag) ?? .all
+        presenter?.update(filter: filter)
+        allButton.isSelected = filter == .all
+        openButton.isSelected = filter == .open
+        closedButton.isSelected = filter == .closed
     }
 }
 
@@ -216,13 +243,16 @@ extension ListViewController: UICollectionViewDataSource {
             collectionCell.configure(
                 name: item.todo,
                 description: item.descriptionTodo,
-                isCompleted: item.completed, 
+                isCompleted: item.completed,
                 date: item.date
-            ) {
-                    
+            ) { [weak self] in
+                guard let self else { return }
+                if let presenter {
+                    presenter.updateCompleted(idTodo: item.id, newValue: !item.completed)
                 }
+            }
         }
-            return collectionCell
+        return collectionCell
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -256,7 +286,7 @@ extension ListViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         minimumLineSpacingForSectionAt section: Int
     ) -> CGFloat {
-        return 10
+        10
     }
     
     func collectionView(
@@ -264,7 +294,7 @@ extension ListViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         minimumInteritemSpacingForSectionAt section: Int
     ) -> CGFloat {
-        return 0
+        0
     }
     
     func collectionView(
@@ -272,18 +302,36 @@ extension ListViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         insetForSectionAt section: Int
     ) -> UIEdgeInsets {
-        
-        return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+    }
+}
+
+// MARK: - extension UICollectionViewDelegate
+
+extension ListViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let list {
+            presenter?.didTapAddNewTodo(event: .edit, todo: list[indexPath.row])
+        }
     }
 }
 
 // MARK: - extension ListViewProtocol
 
 extension ListViewController: ListViewProtocol {
-    func showList(list: [TodoModel]) {
-        self.list = list
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
+    func updateCounters() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self, let presenter else { return }
+            openButton.changeCount(presenter.openTodosCount)
+            closedButton.changeCount(presenter.closedTodosCount)
+            allButton.changeCount(presenter.allTodosCount)
+        }
+    }
+    
+    func updateList() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            collectionView.reloadData()
         }
     }
 }

@@ -20,42 +20,42 @@ final class NetworkLayer {
         completion: @escaping (
             Result<[TodoAPIModel],NetworkLayerError>
         ) -> Void) {
-        let getURLResult = getUrl()
-        switch getURLResult {
-        case .success(let url):
-            var request = URLRequest(url: url)
-            request.httpMethod = "GET"
-            let task = session.dataTask(with: request) {
-                [weak self] data, response, error in
-                guard let self, let response else {
-                    completion(.failure(.unknownError))
-                    return
-                }
-                let responseResult = self.handle(response: response)
-                switch responseResult {
-                case .success(_):
-                    if error != nil {
-                        completion(.failure(.networkError))
+            let getURLResult = getUrl()
+            switch getURLResult {
+            case .success(let url):
+                var request = URLRequest(url: url)
+                request.httpMethod = "GET"
+                let task = session.dataTask(with: request) {
+                    [weak self] data, response, error in
+                    guard let self, let response else {
+                        completion(.failure(.unknownError))
                         return
                     }
-                    if let data {
-                        let decoder = JSONDecoder()
-                        if let list = try? decoder.decode(
-                            Welcome.self, from: data) {
-                            completion(.success(list.todos))
-                        } else {
-                            completion(.failure(.decodingError))
+                    let responseResult = self.handle(response: response)
+                    switch responseResult {
+                    case .success(_):
+                        if error != nil {
+                            completion(.failure(.networkError))
+                            return
                         }
+                        if let data {
+                            let decoder = JSONDecoder()
+                            if let list = try? decoder.decode(
+                                Welcome.self, from: data) {
+                                completion(.success(list.todos))
+                            } else {
+                                completion(.failure(.decodingError))
+                            }
+                        }
+                    case .failure(let error):
+                        completion(.failure(error))
                     }
-                case .failure(let error):
-                    completion(.failure(error))
                 }
+                task.resume()
+            case .failure(let error):
+                completion(.failure(error))
             }
-            task.resume()
-        case .failure(let error):
-            completion(.failure(error))
         }
-    }
     
     private func getUrl() -> Result<URL, NetworkLayerError> {
         guard let url = URL(string: baseURLString) else {

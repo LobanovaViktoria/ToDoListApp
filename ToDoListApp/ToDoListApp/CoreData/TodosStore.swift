@@ -8,6 +8,8 @@
 import Foundation
 import CoreData
 
+// MARK: - struct TodosUpdate
+
 struct TodosUpdate {
     struct Move: Hashable {
         let oldIndex: Int
@@ -26,7 +28,12 @@ protocol TodosStoreDelegate: AnyObject {
     )
 }
 
+// MARK: - class TodosStore
+
 class TodosStore: NSObject {
+    
+    // MARK: - Properties
+    
     weak var delegate: TodosStoreDelegate?
     
     private let context: NSManagedObjectContext
@@ -53,6 +60,8 @@ class TodosStore: NSObject {
         return todos
     }
     
+    // MARK: - Init()
+    
     init(context: NSManagedObjectContext) {
         self.context = context
         super.init()
@@ -71,6 +80,8 @@ class TodosStore: NSObject {
         self.fetchedResultsController = controller
     }
     
+    // MARK: - Methods
+    
     func addNewTodo(_ todo: TodoModel) throws {
         let todoCoreData = TodoCoreData(context: context)
         updateExistingTodo(todoCoreData, with: todo)
@@ -83,16 +94,6 @@ class TodosStore: NSObject {
             syncingData(todoCoreData, with: todo)
         }
         try context.save()
-    }
-    
-    func deleteTodo(_ todoToDelete: TodoModel) throws {
-        let todo = fetchedResultsController.fetchedObjects?.first {
-            $0.id == todoToDelete.id
-        }
-        if let todo = todo {
-            context.delete(todo)
-            try context.save()
-        }
     }
     
     func updateExistingTodo(_ todoCoreData: TodoCoreData, with todo: TodoModel) {
@@ -112,12 +113,36 @@ class TodosStore: NSObject {
         todoCoreData.descriptionTodo = ""
         todoCoreData.todo = todoAPI.todo
     }
-    
-    
-    func fetchTodo() throws -> [TodoModel] {
-        let fetchRequest = TodoCoreData.fetchRequest()
-        let todosFromCoreData = try context.fetch(fetchRequest)
-        return try todosFromCoreData.map { try self.todo(from: $0) }
+   
+    func deleteTodo(_ todoToDelete: TodoModel) throws {
+        let todo = fetchedResultsController.fetchedObjects?.first {
+            $0.id == todoToDelete.id
+        }
+        if let todo = todo {
+            context.delete(todo)
+            try context.save()
+        }
+    }
+
+    func updateTodo(_ newTodoID: String, _ editableTodo: TodoModel) throws {
+        let todo = fetchedResultsController.fetchedObjects?.first {
+            $0.id == editableTodo.id
+        }
+        todo?.todo = editableTodo.todo
+        todo?.descriptionTodo = editableTodo.descriptionTodo
+        todo?.completed = editableTodo.completed
+        todo?.date = editableTodo.date
+        todo?.userId = Int32(editableTodo.userId)
+        
+        try context.save()
+    }
+   
+    func updateCompleted(idTodo: Int, newValue: Bool) throws {
+        let todo = fetchedResultsController.fetchedObjects?.first {
+            $0.id == idTodo
+        }
+        todo?.completed = newValue
+        try context.save()
     }
     
     func todo(from data: TodoCoreData) throws -> TodoModel {
@@ -146,6 +171,8 @@ class TodosStore: NSObject {
         )
     }
 }
+
+// MARK: - extension NSFetchedResultsControllerDelegate
 
 extension TodosStore: NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(
@@ -210,5 +237,3 @@ extension TodosStore: NSFetchedResultsControllerDelegate {
         }
     }
 }
-
-
