@@ -13,7 +13,7 @@ final class FilterButton: UIControl {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .caption1
+        label.font = .caption2
         label.textColor = .customGray
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isUserInteractionEnabled = false
@@ -22,7 +22,7 @@ final class FilterButton: UIControl {
     
     private lazy var countLabel: UILabel = {
         let label = UILabel()
-        label.font = .caption1
+        label.font = .caption2
         label.textColor = .customWhite
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
@@ -40,6 +40,8 @@ final class FilterButton: UIControl {
         return view
     }()
     
+    // MARK: - Properties
+    
     override var isSelected: Bool {
         didSet {
             countLabelView.backgroundColor = isSelected ? .customBlue : .customGray
@@ -47,7 +49,7 @@ final class FilterButton: UIControl {
         }
     }
     
-    // MARK: - LifeCycle
+    // MARK: - Init
     
     init(
         title: String,
@@ -90,6 +92,12 @@ final class FilterButton: UIControl {
             countLabel.topAnchor.constraint(equalTo: countLabelView.topAnchor),
             countLabel.bottomAnchor.constraint(equalTo: countLabelView.bottomAnchor)
         ])
+    }
+    
+    // MARK: - Methods
+    
+    func changeCount(_ value: Int) {
+        countLabel.text = String(value)
     }
 }
 

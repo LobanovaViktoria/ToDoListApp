@@ -19,6 +19,7 @@ extension UIFont {
     static var bodyBold = UIFont.systemFont(ofSize: 12, weight: .bold)
 
     // Caption Fonts
-    static var caption1 = UIFont.systemFont(ofSize: 15, weight: .regular)
+    static var caption1 = UIFont.systemFont(ofSize: 18, weight: .regular)
+    static var caption2 = UIFont.systemFont(ofSize: 15, weight: .regular)
 }
 

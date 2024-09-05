@@ -8,16 +8,24 @@
 import Foundation
 import CoreData
 
+// MARK: - DatabaseError
+
 enum DatabaseError: Error {
     case someError
 }
 
+// MARK: - class DatabaseManager
+
 final class DatabaseManager {
+    
+    // MARK: - Properties
     
     private let modelName = "Todos"
     var context: NSManagedObjectContext {
         persistentContainer.viewContext
     }
+    
+    // MARK: - Init()
     
     init() {
         _ = persistentContainer
@@ -36,19 +44,4 @@ final class DatabaseManager {
         })
         return container
     }()
-    
-    // MARK: - Core Data Saving support
-    
-    func saveContext() {
-        let context = persistentContainer.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        }
-    }
 }
-

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		320F4D8F2C85B551001DA7B7 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F4D8E2C85B551001DA7B7 /* DetailViewController.swift */; };
 		320F4D912C85B5CE001DA7B7 /* ListModuleBulder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F4D902C85B5CE001DA7B7 /* ListModuleBulder.swift */; };
 		320F4D932C85B5E3001DA7B7 /* ListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F4D922C85B5E3001DA7B7 /* ListPresenter.swift */; };
 		320F4D952C85B5F0001DA7B7 /* ListRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F4D942C85B5F0001DA7B7 /* ListRouter.swift */; };
@@ -27,10 +26,14 @@
 		326BEF8F2C88603C00C04C03 /* TodosStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326BEF8E2C88603C00C04C03 /* TodosStore.swift */; };
 		326BEF912C88611600C04C03 /* DataBaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326BEF902C88611600C04C03 /* DataBaseManager.swift */; };
 		326BEF962C88639A00C04C03 /* Todos.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 326BEF942C88639A00C04C03 /* Todos.xcdatamodeld */; };
+		32B2883E2C88A3E0005F2D84 /* DetailRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B288392C88A3E0005F2D84 /* DetailRouter.swift */; };
+		32B2883F2C88A3E0005F2D84 /* DetailModuleBulder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B2883A2C88A3E0005F2D84 /* DetailModuleBulder.swift */; };
+		32B288402C88A3E0005F2D84 /* DetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B2883B2C88A3E0005F2D84 /* DetailPresenter.swift */; };
+		32B288412C88A3E0005F2D84 /* DetailInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B2883C2C88A3E0005F2D84 /* DetailInteractor.swift */; };
+		32B288422C88A3E0005F2D84 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B2883D2C88A3E0005F2D84 /* DetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		320F4D8E2C85B551001DA7B7 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		320F4D902C85B5CE001DA7B7 /* ListModuleBulder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListModuleBulder.swift; sourceTree = "<group>"; };
 		320F4D922C85B5E3001DA7B7 /* ListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListPresenter.swift; sourceTree = "<group>"; };
 		320F4D942C85B5F0001DA7B7 /* ListRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRouter.swift; sourceTree = "<group>"; };
@@ -54,6 +57,11 @@
 		326BEF8E2C88603C00C04C03 /* TodosStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosStore.swift; sourceTree = "<group>"; };
 		326BEF902C88611600C04C03 /* DataBaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseManager.swift; sourceTree = "<group>"; };
 		326BEF952C88639A00C04C03 /* Todos.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Todos.xcdatamodel; sourceTree = "<group>"; };
+		32B288392C88A3E0005F2D84 /* DetailRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailRouter.swift; sourceTree = "<group>"; };
+		32B2883A2C88A3E0005F2D84 /* DetailModuleBulder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailModuleBulder.swift; sourceTree = "<group>"; };
+		32B2883B2C88A3E0005F2D84 /* DetailPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailPresenter.swift; sourceTree = "<group>"; };
+		32B2883C2C88A3E0005F2D84 /* DetailInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailInteractor.swift; sourceTree = "<group>"; };
+		32B2883D2C88A3E0005F2D84 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DetailViewController.swift; path = "../../../../Downloads/ToDoListApp-addNewTodo/ToDoListApp/ToDoListApp/Detail/DetailViewController.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,7 +101,11 @@
 		320F4D8D2C85B4BB001DA7B7 /* Detail */ = {
 			isa = PBXGroup;
 			children = (
-				320F4D8E2C85B551001DA7B7 /* DetailViewController.swift */,
+				32B2883C2C88A3E0005F2D84 /* DetailInteractor.swift */,
+				32B2883A2C88A3E0005F2D84 /* DetailModuleBulder.swift */,
+				32B2883B2C88A3E0005F2D84 /* DetailPresenter.swift */,
+				32B288392C88A3E0005F2D84 /* DetailRouter.swift */,
+				32B2883D2C88A3E0005F2D84 /* DetailViewController.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -249,6 +261,8 @@
 			files = (
 				326BEF822C87272300C04C03 /* NetworkLayer.swift in Sources */,
 				326BEF962C88639A00C04C03 /* Todos.xcdatamodeld in Sources */,
+				32B2883F2C88A3E0005F2D84 /* DetailModuleBulder.swift in Sources */,
+				32B288402C88A3E0005F2D84 /* DetailPresenter.swift in Sources */,
 				326BEF8F2C88603C00C04C03 /* TodosStore.swift in Sources */,
 				320F52FE2C85A14D009E511E /* ListViewController.swift in Sources */,
 				320F4D952C85B5F0001DA7B7 /* ListRouter.swift in Sources */,
@@ -256,12 +270,14 @@
 				320F52FA2C85A14D009E511E /* AppDelegate.swift in Sources */,
 				326BEF912C88611600C04C03 /* DataBaseManager.swift in Sources */,
 				320F4DA62C85BEC5001DA7B7 /* Font+Ext.swift in Sources */,
-				320F4D8F2C85B551001DA7B7 /* DetailViewController.swift in Sources */,
+				32B288422C88A3E0005F2D84 /* DetailViewController.swift in Sources */,
 				320F4D932C85B5E3001DA7B7 /* ListPresenter.swift in Sources */,
 				320F4D972C85B605001DA7B7 /* ListInteractor.swift in Sources */,
 				320F52FC2C85A14D009E511E /* SceneDelegate.swift in Sources */,
 				326BEF7F2C86FFAC00C04C03 /* TodoModel.swift in Sources */,
 				320F4D9D2C85BC0E001DA7B7 /* String+Ext.swift in Sources */,
+				32B2883E2C88A3E0005F2D84 /* DetailRouter.swift in Sources */,
+				32B288412C88A3E0005F2D84 /* DetailInteractor.swift in Sources */,
 				320F4D9A2C85BB1E001DA7B7 /* ListItemCell.swift in Sources */,
 				326BEF862C8754A900C04C03 /* FilterButton.swift in Sources */,
 			);
