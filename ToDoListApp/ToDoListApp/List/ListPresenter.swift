@@ -11,15 +11,17 @@ import Foundation
 
 protocol ListPresenterProtocol: AnyObject {
     
-    var allTodos: Int { get }
-    var openTodos: Int { get }
-    var closedTodos: Int { get }
+    var allTodosCount: Int { get }
+    var openTodosCount: Int { get }
+    var closedTodosCount: Int { get }
+    var todos: [TodoModel] { get }
     
     func viewDidLoaded()
     func uploadedFromCoreData(list: [TodoModel])
     func didTapAddNewTodo(event: Event, todo: TodoModel?)
     func updateCompleted(idTodo: Int, newValue: Bool)
-    func store(list: [TodoModel]) 
+    func update(filter: Filter)
+    func store(list: [TodoModel])
 }
 
 // MARK: - class ListPresenter
@@ -31,6 +33,8 @@ class ListPresenter {
     weak var view: ListViewProtocol?
     var router: ListRouterProtocol
     var interactor: ListInteractorProtocol
+    var allTodos: [TodoModel] = []
+    var selectedFilter: Filter = .all
     
     // MARK: - Init()
     
@@ -46,17 +50,27 @@ class ListPresenter {
 // MARK: - extension ListPresenterProtocol
 
 extension ListPresenter: ListPresenterProtocol {
-   
-    var allTodos: Int {
-        interactor.allTodos
+    var todos: [TodoModel] {
+        switch selectedFilter {
+        case .all:
+            allTodos
+        case .open:
+            allTodos.filter{ $0.completed == false }
+        case .closed:
+            allTodos.filter{ $0.completed == true }
+        }
+    }
+
+    var allTodosCount: Int {
+        allTodos.count
     }
     
-    var openTodos: Int {
-        interactor.openTodos
+    var openTodosCount: Int {
+        allTodos.filter{ $0.completed == false }.count
     }
     
-    var closedTodos: Int {
-        interactor.closedTodos
+    var closedTodosCount: Int {
+        allTodos.filter{ $0.completed == true }.count
     }
     
     func viewDidLoaded() {
@@ -64,12 +78,20 @@ extension ListPresenter: ListPresenterProtocol {
     }
     
     func store(list: [TodoModel]) {
-        view?.showList(list: list)
+        allTodos = list
+        view?.updateList()
         view?.updateCounters()
     }
     
     func uploadedFromCoreData(list: [TodoModel]) {
-        view?.showList(list: list)
+        allTodos = list
+        view?.updateList()
+        view?.updateCounters()
+    }
+    
+    func update(filter: Filter) {
+        selectedFilter = filter
+        view?.updateList()
     }
     
     func didTapAddNewTodo(event: Event, todo: TodoModel?) {

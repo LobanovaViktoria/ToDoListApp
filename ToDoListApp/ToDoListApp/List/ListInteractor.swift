@@ -10,9 +10,6 @@ import UIKit
 // MARK: - protocol ListInteractorProtocol
 
 protocol ListInteractorProtocol: AnyObject {
-    var allTodos: Int { get }
-    var openTodos: Int { get }
-    var closedTodos: Int { get }
     func getList()
     func syncingAPIAndCorData(list: [TodoAPIModel]?)
     func updateCompleted(idTodo: Int, newValue: Bool)
@@ -62,27 +59,6 @@ class ListInteractor {
 // MARK: - Extension ListInteractorProtocol
 
 extension ListInteractor: ListInteractorProtocol {
-
-    var allTodos: Int {
-        todosStore.todos.count
-    }
-    
-    var openTodos: Int {
-        todosStore.todos.filter(
-            {
-                $0.completed == false
-            }
-        ).count
-    }
-    
-    var closedTodos: Int {
-        todosStore.todos.filter(
-            {
-                $0.completed == true
-            }
-        ).count
-    }
-    
     func getList() {
         if UserDefaults.standard.value(
             forKey: userDefaultsString
@@ -110,8 +86,6 @@ extension ListInteractor: ListInteractorProtocol {
 extension ListInteractor: TodosStoreDelegate {
     
     func store(_ store: TodosStore, didUpdate update: TodosUpdate) {
-        if let presenter {
-            presenter.store(list: store.todos)
-        }
+        presenter?.store(list: store.todos)
     }
 }
