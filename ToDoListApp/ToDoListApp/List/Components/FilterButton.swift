@@ -90,7 +90,7 @@ final class FilterButton: UIControl {
             
             countLabelView.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: 10),
             countLabelView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            countLabelView.widthAnchor.constraint(greaterThanOrEqualToConstant: 30),
+            countLabelView.widthAnchor.constraint(greaterThanOrEqualToConstant: 20),
             countLabelView.heightAnchor.constraint(equalToConstant: 20),
             countLabelView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             
