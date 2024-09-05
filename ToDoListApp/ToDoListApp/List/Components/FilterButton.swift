@@ -44,8 +44,13 @@ final class FilterButton: UIControl {
     
     override var isSelected: Bool {
         didSet {
-            countLabelView.backgroundColor = isSelected ? .customBlue : .customGray
-            titleLabel.textColor = isSelected ? .customBlue : .customGray
+            countLabelView.backgroundColor = isSelected 
+                ? .customBlue
+                : .customGray
+            
+            titleLabel.textColor = isSelected 
+                ? .customBlue
+                : .customGray
         }
     }
     
@@ -100,4 +105,3 @@ final class FilterButton: UIControl {
         countLabel.text = String(value)
     }
 }
-

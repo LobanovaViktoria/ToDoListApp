@@ -23,8 +23,8 @@ class ListViewController: UIViewController {
     var presenter: ListPresenterProtocol?
     
     private let indent: CGFloat = 20
-    var list: [TodoModel]?
-    var selectedTodo: TodoModel?
+    private var list: [TodoModel]?
+    private var selectedTodo: TodoModel?
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -50,25 +50,46 @@ class ListViewController: UIViewController {
     }()
     
     private lazy var allButton: FilterButton = {
-        let button = FilterButton(title: "all".localized, count: presenter?.allTodos ?? 0)
+        let button = FilterButton(
+            title: "all".localized,
+            count: presenter?.allTodos ?? 0
+        )
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(allButtonPressed), for: .touchUpInside)
+        button.addTarget(
+            self,
+            action: #selector(allButtonPressed),
+            for: .touchUpInside
+        )
         button.isSelected = true
         return button
     }()
     
     private lazy var openButton: FilterButton = {
-        let button = FilterButton(title: "open".localized, count: presenter?.openTodos ?? 0)
+        let button = FilterButton(
+            title: "open".localized,
+            count: presenter?.openTodos ?? 0
+        )
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(openButtonPressed), for: .touchUpInside)
+        button.addTarget(
+            self,
+            action: #selector(openButtonPressed),
+            for: .touchUpInside
+        )
         button.isSelected = false
         return button
     }()
     
     private lazy var closedButton: FilterButton = {
-        let button = FilterButton(title: "closed".localized, count: presenter?.closedTodos ?? 0)
+        let button = FilterButton(
+            title: "closed".localized,
+            count: presenter?.closedTodos ?? 0
+        )
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(closedButtonPressed), for: .touchUpInside)
+        button.addTarget(
+            self,
+            action: #selector(closedButtonPressed),
+            for: .touchUpInside
+        )
         button.isSelected = false
         return button
     }()
@@ -82,7 +103,11 @@ class ListViewController: UIViewController {
     
     private lazy var addNewTaskButton: UIButton = {
         let button = UIButton()
-        button.addTarget(self, action: #selector(addNewTaskButtonPressed), for: .touchUpInside)
+        button.addTarget(
+            self,
+            action: #selector(addNewTaskButtonPressed),
+            for: .touchUpInside
+        )
         button.setTitle("addNewTask".localized, for: .normal)
         button.titleLabel?.font = .headline3
         button.setTitleColor(.customBlue, for: .normal)
@@ -105,8 +130,10 @@ class ListViewController: UIViewController {
         let collectionView = UICollectionView(
             frame: .zero,
             collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.register(ListItemCell.self,
-                                forCellWithReuseIdentifier: ListItemCell.identifier)
+        collectionView.register(
+            ListItemCell.self,
+            forCellWithReuseIdentifier: ListItemCell.identifier
+        )
         collectionView.backgroundColor = .customLightGray
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
