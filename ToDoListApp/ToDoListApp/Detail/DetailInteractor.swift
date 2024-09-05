@@ -12,7 +12,7 @@ protocol DetailInteractorProtocol: AnyObject {
 }
 
 class DetailInteractor: DetailInteractorProtocol {
-    weak var presenter: DetailPresenterProtocol?
     
+    weak var presenter: DetailPresenterProtocol?
 }
 

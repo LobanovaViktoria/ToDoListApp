@@ -6,15 +6,16 @@
 //
 
 import Foundation
+
 class DetailModuleBulder {
-    static func build() -> DetailViewController {
+    static func build(event: Event, todo: TodoModel?) -> DetailViewController {
         let interactor = DetailInteractor()
         let router = DetailRouter()
         let presenter = DetailPresenter(
             router: router,
             interactor: interactor
         )
-        let viewController = DetailViewController()
+        let viewController = DetailViewController(event, todo: todo)
         viewController.presenter = presenter
         presenter.view = viewController
         interactor.presenter = presenter
@@ -22,4 +23,3 @@ class DetailModuleBulder {
         return viewController
     }
 }
-

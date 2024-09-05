@@ -9,3 +9,8 @@
 "description" = "Description";
 "created" = "Created";
 "completed" = "Is completed";
+"editTodoTitle" = "Edit the task...";
+"delete" = "Delete";
+"cancel" = "Cancel";
+"save" = "Save";
+"deleteMessage" = "Are you sure you want to delete the task?";

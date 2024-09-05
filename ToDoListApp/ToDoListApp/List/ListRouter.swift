@@ -8,13 +8,15 @@
 import Foundation
  
 protocol ListRouterProtocol {
-    func openDetail()
+    func openDetail(event: Event, todo: TodoModel?)
 }
 
 class ListRouter: ListRouterProtocol {
+    
     weak var viewController: ListViewController?
-    func openDetail() {
-        let vc = DetailModuleBulder.build()
+    
+    func openDetail(event: Event, todo: TodoModel?) {
+        let vc = DetailModuleBulder.build(event: event, todo: todo)
         viewController?.present(vc, animated: true, completion: nil)
     }
 }

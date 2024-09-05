@@ -7,10 +7,14 @@
 
 import UIKit
 
+// MARK: - protocol ListInteractorProtocol
+
 protocol ListInteractorProtocol: AnyObject {
     func getListFromAPI()
     func getListFromCoreData()
 }
+
+// MARK: - class ListInteractor
 
 class ListInteractor {
     

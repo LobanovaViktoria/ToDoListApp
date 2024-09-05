@@ -8,16 +8,24 @@
 import Foundation
 import CoreData
 
+// MARK: - DatabaseError
+
 enum DatabaseError: Error {
     case someError
 }
 
+// MARK: - class DatabaseManager
+
 final class DatabaseManager {
+    
+    // MARK: - Properties
     
     private let modelName = "Todos"
     var context: NSManagedObjectContext {
         persistentContainer.viewContext
     }
+    
+    // MARK: - Init()
     
     init() {
         _ = persistentContainer
@@ -37,4 +45,3 @@ final class DatabaseManager {
         return container
     }()
 }
-

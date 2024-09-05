@@ -7,10 +7,15 @@
 
 
 protocol DetailRouterProtocol {
-   
+    func closeDetail()
 }
 
 class DetailRouter: DetailRouterProtocol {
-   weak var viewController: DetailViewController?
+    
+    weak var viewController: DetailViewController?
+    
+    func closeDetail() {
+        viewController?.dismiss(animated: false)
+    }
 }
 
