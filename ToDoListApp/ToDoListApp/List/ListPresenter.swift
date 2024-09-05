@@ -10,14 +10,18 @@ import Foundation
 // MARK: - protocol ListPresenterProtocol
 
 protocol ListPresenterProtocol: AnyObject {
-    var allTodos: Int { get }
-    var openTodos: Int { get }
-    var closedTodos: Int { get }
+    
+    var allTodosCount: Int { get }
+    var openTodosCount: Int { get }
+    var closedTodosCount: Int { get }
+    var todos: [TodoModel] { get }
+    
     func viewDidLoaded()
-    func uploadedFromCoreData()
-    func syncingAPIAndCorData(list: [TodoAPIModel]?)
+    func uploadedFromCoreData(list: [TodoModel])
     func didTapAddNewTodo(event: Event, todo: TodoModel?)
     func updateCompleted(idTodo: Int, newValue: Bool)
+    func update(filter: Filter)
+    func store(list: [TodoModel])
 }
 
 // MARK: - class ListPresenter
@@ -26,12 +30,11 @@ class ListPresenter {
     
     // MARK: - Properties
     
-    private let userDefaultsString = "dataIsSynchronized"
-    private let todosStore = TodosStore()
-    
     weak var view: ListViewProtocol?
     var router: ListRouterProtocol
     var interactor: ListInteractorProtocol
+    var allTodos: [TodoModel] = []
+    var selectedFilter: Filter = .all
     
     // MARK: - Init()
     
@@ -41,68 +44,68 @@ class ListPresenter {
     {
         self.router = router
         self.interactor = interactor
-        todosStore.delegate = self
     }
 }
 
 // MARK: - extension ListPresenterProtocol
 
 extension ListPresenter: ListPresenterProtocol {
-   
-    var allTodos: Int {
-        todosStore.todos.count
+    var todos: [TodoModel] {
+        switch selectedFilter {
+        case .all:
+            allTodos
+        case .open:
+            allTodos.filter{ $0.completed == false }
+        case .closed:
+            allTodos.filter{ $0.completed == true }
+        }
+    }
+
+    var allTodosCount: Int {
+        allTodos.count
     }
     
-    var openTodos: Int {
-        todosStore.todos.filter(
-            {
-                $0.completed == false
-            }
-        ).count
+    var openTodosCount: Int {
+        allTodos.filter{ $0.completed == false }.count
     }
     
-    var closedTodos: Int {
-        todosStore.todos.filter(
-            {
-                $0.completed == true
-            }
-        ).count
+    var closedTodosCount: Int {
+        allTodos.filter{ $0.completed == true }.count
     }
     
     func viewDidLoaded() {
-        if UserDefaults.standard.value(forKey: userDefaultsString) == nil {
-            interactor.getListFromAPI()
-        }
-        UserDefaults.standard.set(true, forKey: userDefaultsString)
-        interactor.getListFromCoreData()
+        interactor.getList()
     }
     
-    func syncingAPIAndCorData(list: [TodoAPIModel]?) {
-        if let list = list {
-            try? todosStore.addTodosFromApi(list)
-        }
+    func store(list: [TodoModel]) {
+        allTodos = list
+        view?.updateList()
+        view?.updateCounters()
     }
     
-    func uploadedFromCoreData() {
-        view?.showList(list: todosStore.todos)
+    func uploadedFromCoreData(list: [TodoModel]) {
+        allTodos = list
+        view?.updateList()
+        view?.updateCounters()
+    }
+    
+    func update(filter: Filter) {
+        selectedFilter = filter
+        view?.updateList()
     }
     
     func didTapAddNewTodo(event: Event, todo: TodoModel?) {
-        router.openDetail(event: event, todo: todo)
+         switch event {
+         case .add:
+             router.openDetailAdd(event: event)
+         case .edit:
+             if let todo {
+                 router.openDetailEdit(event: event, todo: todo)
+             }
+         }
     }
     
     func updateCompleted(idTodo: Int, newValue: Bool) {
-        try? todosStore.updateCompleted(idTodo: idTodo, newValue: newValue)
-    }
-    
-}
-
-// MARK: - TodosStoreDelegate
-
-extension ListPresenter: TodosStoreDelegate {
-    
-    func store(_ store: TodosStore, didUpdate update: TodosUpdate) {
-        view?.showList(list: store.todos)
-        view?.updateCounters()
+        interactor.updateCompleted(idTodo: idTodo, newValue: newValue)
     }
 }

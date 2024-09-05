@@ -4,12 +4,12 @@
 "all" = "All";
 "open" = "Open";
 "closed" = "Closed";
-"addTodoTitle" = "Add todo...";
+"addTodoTitle" = "Add todo";
 "todo" = "Todo";
 "description" = "Description";
 "created" = "Created";
 "completed" = "Is completed";
-"editTodoTitle" = "Edit the task...";
+"editTodoTitle" = "Edit the task";
 "delete" = "Delete";
 "cancel" = "Cancel";
 "save" = "Save";

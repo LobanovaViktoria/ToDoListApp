@@ -14,6 +14,7 @@ final class FilterButton: UIControl {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = .caption2
+        label.text = filter.title
         label.textColor = .customGray
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isUserInteractionEnabled = false
@@ -42,23 +43,29 @@ final class FilterButton: UIControl {
     
     // MARK: - Properties
     
+    let filter: Filter
+    
     override var isSelected: Bool {
         didSet {
-            countLabelView.backgroundColor = isSelected ? .customBlue : .customGray
-            titleLabel.textColor = isSelected ? .customBlue : .customGray
+            countLabelView.backgroundColor = isSelected 
+                ? .customBlue
+                : .customGray
+            
+            titleLabel.textColor = isSelected 
+                ? .customBlue
+                : .customGray
         }
     }
     
     // MARK: - Init
     
     init(
-        title: String,
-        count: Int
+        count: Int,
+        filter: Filter
     ) {
+        self.filter = filter
         super.init(frame: .zero)
-        titleLabel.text = title
         countLabel.text = String(count)
-        
         addSubviews()
         setupLayout()
     }
@@ -100,4 +107,3 @@ final class FilterButton: UIControl {
         countLabel.text = String(value)
     }
 }
-

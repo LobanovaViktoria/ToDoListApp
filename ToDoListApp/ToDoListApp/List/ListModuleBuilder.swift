@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ListModuleBulder {
+class ListModuleBuilder {
     static func build() -> ListViewController {
         let interactor = ListInteractor()
         let router = ListRouter()

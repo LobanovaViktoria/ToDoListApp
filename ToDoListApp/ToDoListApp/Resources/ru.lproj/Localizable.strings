@@ -4,12 +4,12 @@
 "all" = "Все";
 "open" = "Открыты";
 "closed" = "Закрыты";
-"addTodoTitle" = "Добавить задачу...";
+"addTodoTitle" = "Добавить задачу";
 "todo" = "Задача";
 "description" = "Описание";
 "created" = "Создана";
 "completed" = "Выполнена";
-"editTodoTitle" = "Внесите изменения...";
+"editTodoTitle" = "Внесите изменения";
 "delete" = "Удалить";
 "cancel" = "Отменить";
 "save" = "Сохранить";

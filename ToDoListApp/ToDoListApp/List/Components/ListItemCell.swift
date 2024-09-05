@@ -107,7 +107,10 @@ final class ListItemCell: UICollectionViewCell {
                 doneButton.setImage(UIImage(
                     systemName: "checkmark.circle.fill"), for: .normal)
                 doneButton.imageView?.tintColor = UIColor.customBlue
-                taskName.attributedText = NSAttributedString(string: name, attributes: [NSAttributedString.Key.strikethroughStyle: NSUnderlineStyle.single.rawValue])
+                taskName.attributedText = NSAttributedString(
+                    string: name,
+                    attributes: [NSAttributedString.Key.strikethroughStyle: NSUnderlineStyle.single.rawValue]
+                )
                 
             } else {
                 doneButton.setImage(UIImage(
@@ -115,7 +118,10 @@ final class ListItemCell: UICollectionViewCell {
                 ), for: .normal)
                 doneButton.imageView?.tintColor =
                  UIColor.customLightGray
-                taskName.attributedText = NSAttributedString(string: name, attributes: [:])
+                taskName.attributedText = NSAttributedString(
+                    string: name,
+                    attributes: [:]
+                )
             }
             descriptionLabel.text = description
             onToggleDone = doneButtonAction

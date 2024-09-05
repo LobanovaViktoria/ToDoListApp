@@ -5,22 +5,6 @@
 //  Created by Viktoria Lobanova on 04.09.2024.
 //
 
-// MARK: - enum Event
-
-enum Event {
-    case add
-    case edit
-    
-    var titleVC: String {
-        switch self {
-        case .add:
-            return "addTodoTitle".localized
-        case .edit:
-            return "editTodoTitle".localized
-        }
-    }
-}
-
 // MARK: - protocol DetailPresenterProtocol
 
 protocol DetailPresenterProtocol: AnyObject {
@@ -40,8 +24,6 @@ class DetailPresenter {
     var router: DetailRouterProtocol
     var interactor: DetailInteractorProtocol
     
-    private let todosStore = TodosStore()
-    
     // MARK: - Init()
     
     init(
@@ -57,18 +39,18 @@ class DetailPresenter {
 
 extension DetailPresenter: DetailPresenterProtocol {
     func deleteTodo(todo: TodoModel) {
-        try? todosStore.deleteTodo(todo)
+        interactor.deleteTodo(todo: todo)
         router.closeDetail()
     }
     
     func saveNewTodo(todo: TodoModel?) {
         guard let todo else { return router.closeDetail() }
-        try? todosStore.addNewTodo(todo)
+        interactor.saveNewTodo(todo: todo)
         router.closeDetail()
     }
     
     func updateTodo(_ newTodo: TodoModel, _ editableTodo: TodoModel) {
-        try? todosStore.updateTodo(newTodo.todo, editableTodo)
+        interactor.updateTodo(newTodo, editableTodo)
         router.closeDetail()
     }
     

@@ -18,4 +18,3 @@ class DetailRouter: DetailRouterProtocol {
         viewController?.dismiss(animated: false)
     }
 }
-
