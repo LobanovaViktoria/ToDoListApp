@@ -193,7 +193,6 @@ private extension ListViewController {
         allButton.isSelected = !allButton.isSelected
         openButton.isSelected = !allButton.isSelected
         closedButton.isSelected = !allButton.isSelected
-        
     }
     
     @objc func openButtonPressed() {

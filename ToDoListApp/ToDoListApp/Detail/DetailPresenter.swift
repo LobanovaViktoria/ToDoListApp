@@ -5,6 +5,22 @@
 //  Created by Viktoria Lobanova on 04.09.2024.
 //
 
+// MARK: - enum Event
+
+enum Event {
+    case add
+    case edit
+    
+    var titleVC: String {
+        switch self {
+        case .add:
+            return "addTodoTitle".localized
+        case .edit:
+            return "editTodoTitle".localized
+        }
+    }
+}
+
 // MARK: - protocol DetailPresenterProtocol
 
 protocol DetailPresenterProtocol: AnyObject {
