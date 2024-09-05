@@ -81,11 +81,9 @@ extension ListPresenter: ListPresenterProtocol {
                  router.openDetailEdit(event: event, todo: todo)
              }
          }
-        
     }
     
     func updateCompleted(idTodo: Int, newValue: Bool) {
         interactor.updateCompleted(idTodo: idTodo, newValue: newValue)
     }
-    
 }

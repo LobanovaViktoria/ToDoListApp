@@ -7,8 +7,6 @@
 
 import UIKit
 
-
-
 // MARK: - protocol ListInteractorProtocol
 
 protocol ListInteractorProtocol: AnyObject {
@@ -33,9 +31,13 @@ class ListInteractor {
     
     var onError: ((NetworkLayerError) -> Void)?
     
+    // MARK: - Init()
+    
     init() {
         todosStore.delegate = self
     }
+    
+    // MARK: - private methods
     
     private func getListFromAPI() {
         service.getList() { [weak self] result in
@@ -102,6 +104,8 @@ extension ListInteractor: ListInteractorProtocol {
         }
     }
 }
+
+// MARK: - extension TodosStoreDelegate
 
 extension ListInteractor: TodosStoreDelegate {
     
