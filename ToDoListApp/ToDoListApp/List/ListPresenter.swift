@@ -59,7 +59,7 @@ extension ListPresenter: ListPresenterProtocol {
     }
     
     func uploadedFromCoreData() {
-            view?.showList(list: todosStore.todos)
+        view?.showList(list: todosStore.todos)
     }
     
     func didTapAddNewTodo() {
@@ -70,6 +70,6 @@ extension ListPresenter: ListPresenterProtocol {
 extension ListPresenter: TodosStoreDelegate {
     
     func store(_ store: TodosStore, didUpdate update: TodosUpdate) {
-        
+        view?.showList(list: store.todos)
     }
 }
