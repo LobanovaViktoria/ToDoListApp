@@ -8,3 +8,4 @@
 "todo" = "Todo";
 "description" = "Description";
 "created" = "Created";
+"completed" = "Is completed";
