@@ -10,14 +10,16 @@ import Foundation
 // MARK: - protocol ListPresenterProtocol
 
 protocol ListPresenterProtocol: AnyObject {
+    
     var allTodos: Int { get }
     var openTodos: Int { get }
     var closedTodos: Int { get }
+    
     func viewDidLoaded()
-    func uploadedFromCoreData()
-    func syncingAPIAndCorData(list: [TodoAPIModel]?)
+    func uploadedFromCoreData(list: [TodoModel])
     func didTapAddNewTodo(event: Event, todo: TodoModel?)
     func updateCompleted(idTodo: Int, newValue: Bool)
+    func store(list: [TodoModel]) 
 }
 
 // MARK: - class ListPresenter
@@ -25,9 +27,6 @@ protocol ListPresenterProtocol: AnyObject {
 class ListPresenter {
     
     // MARK: - Properties
-    
-    private let userDefaultsString = "dataIsSynchronized"
-    private let todosStore = TodosStore()
     
     weak var view: ListViewProtocol?
     var router: ListRouterProtocol
@@ -41,7 +40,6 @@ class ListPresenter {
     {
         self.router = router
         self.interactor = interactor
-        todosStore.delegate = self
     }
 }
 
@@ -50,59 +48,44 @@ class ListPresenter {
 extension ListPresenter: ListPresenterProtocol {
    
     var allTodos: Int {
-        todosStore.todos.count
+        interactor.allTodos
     }
     
     var openTodos: Int {
-        todosStore.todos.filter(
-            {
-                $0.completed == false
-            }
-        ).count
+        interactor.openTodos
     }
     
     var closedTodos: Int {
-        todosStore.todos.filter(
-            {
-                $0.completed == true
-            }
-        ).count
+        interactor.closedTodos
     }
     
     func viewDidLoaded() {
-        if UserDefaults.standard.value(forKey: userDefaultsString) == nil {
-            interactor.getListFromAPI()
-        }
-        UserDefaults.standard.set(true, forKey: userDefaultsString)
-        interactor.getListFromCoreData()
+        interactor.getList()
     }
     
-    func syncingAPIAndCorData(list: [TodoAPIModel]?) {
-        if let list = list {
-            try? todosStore.addTodosFromApi(list)
-        }
+    func store(list: [TodoModel]) {
+        view?.showList(list: list)
+        view?.updateCounters()
     }
     
-    func uploadedFromCoreData() {
-        view?.showList(list: todosStore.todos)
+    func uploadedFromCoreData(list: [TodoModel]) {
+        view?.showList(list: list)
     }
     
     func didTapAddNewTodo(event: Event, todo: TodoModel?) {
-        router.openDetail(event: event, todo: todo)
+         switch event {
+         case .add:
+             router.openDetailAdd(event: event)
+         case .edit:
+             if let todo {
+                 router.openDetailEdit(event: event, todo: todo)
+             }
+         }
+        
     }
     
     func updateCompleted(idTodo: Int, newValue: Bool) {
-        try? todosStore.updateCompleted(idTodo: idTodo, newValue: newValue)
+        interactor.updateCompleted(idTodo: idTodo, newValue: newValue)
     }
     
-}
-
-// MARK: - TodosStoreDelegate
-
-extension ListPresenter: TodosStoreDelegate {
-    
-    func store(_ store: TodosStore, didUpdate update: TodosUpdate) {
-        view?.showList(list: store.todos)
-        view?.updateCounters()
-    }
 }
