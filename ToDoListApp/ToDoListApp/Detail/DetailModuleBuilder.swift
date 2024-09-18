@@ -7,7 +7,7 @@
 
 import Foundation
 
-class DetailModuleBuilder {
+final class DetailModuleBuilder {
     
     static func build(with event: Event, todo: TodoModel?) -> DetailViewController {
         let interactor = DetailInteractor()

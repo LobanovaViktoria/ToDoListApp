@@ -30,7 +30,7 @@ protocol TodosStoreDelegate: AnyObject {
 
 // MARK: - class TodosStore
 
-class TodosStore: NSObject {
+final class TodosStore: NSObject {
     
     // MARK: - Properties
     

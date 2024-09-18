@@ -16,7 +16,7 @@ protocol ListViewProtocol: AnyObject {
 
 // MARK: - class ListViewController
 
-class ListViewController: UIViewController {
+final class ListViewController: UIViewController {
     
     // MARK: - Properties
     

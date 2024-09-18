@@ -10,7 +10,7 @@ protocol DetailRouterProtocol {
     func closeDetail()
 }
 
-class DetailRouter: DetailRouterProtocol {
+final class DetailRouter: DetailRouterProtocol {
     
     weak var viewController: DetailViewController?
     

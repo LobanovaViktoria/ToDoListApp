@@ -31,7 +31,7 @@ protocol DetailInteractorProtocol: AnyObject {
     func updateTodo(_ newTodo: TodoModel, _ editableTodo: TodoModel)
 }
 
-class DetailInteractor {
+final class DetailInteractor {
     
     // MARK: - Properties
     

@@ -12,7 +12,7 @@ protocol ListRouterProtocol {
     func openDetailEdit(event: Event, todo: TodoModel)
 }
 
-class ListRouter: ListRouterProtocol {
+final class ListRouter: ListRouterProtocol {
     
     weak var viewController: ListViewController?
     

@@ -16,7 +16,7 @@ protocol DetailPresenterProtocol: AnyObject {
 
 // MARK: - class DetailPresenter
 
-class DetailPresenter {
+final class DetailPresenter {
     
     // MARK: - Properties
     

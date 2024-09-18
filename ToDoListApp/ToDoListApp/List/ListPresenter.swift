@@ -26,7 +26,7 @@ protocol ListPresenterProtocol: AnyObject {
 
 // MARK: - class ListPresenter
 
-class ListPresenter {
+final class ListPresenter {
     
     // MARK: - Properties
     

@@ -17,7 +17,7 @@ protocol ListInteractorProtocol: AnyObject {
 
 // MARK: - class ListInteractor
 
-class ListInteractor {
+final class ListInteractor {
     
     // MARK: - Properties
     

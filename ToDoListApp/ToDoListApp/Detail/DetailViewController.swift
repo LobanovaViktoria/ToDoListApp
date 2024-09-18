@@ -15,7 +15,7 @@ protocol DetailViewProtocol: AnyObject {
 
 // MARK: - class DetailViewController
 
-class DetailViewController: UIViewController, UIGestureRecognizerDelegate {
+final class DetailViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // MARK: - Properties
     
